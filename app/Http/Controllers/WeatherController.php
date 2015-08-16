@@ -23,6 +23,13 @@ class WeatherController extends BaseController
 
         // We grab the latest data from this lat and long
         $rawData = file_get_contents('http://api.openweathermap.org/data/2.5/weather?lat=' . $lat . '&lon=' . $lon);
+
+        if (!$rawData) {
+            // We failed to retrieve data from the webservice
+            // Just return the stuff we have
+            return $weather->where('lat', $lat)->where('lon', $lon)->limit(10)->get();
+        }
+
         $jsonData = json_decode($rawData, true);
 
         // We transform this data
