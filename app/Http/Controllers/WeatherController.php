@@ -34,8 +34,14 @@ class WeatherController extends BaseController
             'temp' => $jsonData['main']['temp'] - 273.15,
         ];
 
+        // Check if we already have a record with same lat/lon and dt in our database
+        $weatherCheck = $weather->where('lat', $lat)->where('lon', $lon)->where('dt', Carbon::createFromTimeStamp($data['dt']))->limit(1)->get();
+
+        // Record isn't in our db yet
+        if ($weatherCheck->isEmpty()) {
             // We store the data in our database
             $weather->create($data);
+        }
 
         // We grab the last 10 weather report from given lat/lon and return it
         return $weather->where('lat', $lat)->where('lon', $lon)->limit(10)->get();
