@@ -53,4 +53,9 @@ class WeatherController extends BaseController
         // We grab the last 10 weather report from given lat/lon and return it
         return $weather->where('lat', $lat)->where('lon', $lon)->limit(10)->get();
     }
+
+    public function store(Request $request)
+    {
+        return $request->all();
+    }
 }
